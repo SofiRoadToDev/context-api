@@ -26,7 +26,6 @@ export const todoReducer=(state,action)=>{
 
         case TYPES.ADD:{
             const newToDo= payload
-
             return {
                 ...state,
                 toDoList:[

@@ -19,9 +19,26 @@ const fetchToDos= async () => {
   if(res.ok){
     return await res.json()
   }else{
-    throw new Error(` Error: ${error.statustext}`)
+    throw new Error(` Error: ${res.error}`)
   }
  
+}
+
+const createToDoRequest=async(data)=>{
+  
+  var formData=new FormData()
+  formData.append("file",data.image)
+  formData.append("description",data.description)
+  formData.append("completed",data.completed)
+  formData.append("title",data.title)
+  console.log('FORMDATA ANTES DE ENFVIAR')
+  console.log(formData)
+  const res= await fetch(url,{
+    method:'POST', 
+    body:formData
+  })
+  if (res.ok )return await res.json()
+  else throw new Error(`Error al crear todo: ${res.statusText}`)
 }
 
 
@@ -37,7 +54,10 @@ const fillToDoList=async()=>{
 }
 
 const createToDo=(toDo)=>{
-  dispatch({type:TYPES.ADD,payload:toDo})
+  createToDoRequest(toDo).then(r=>{
+    dispatch({type:TYPES.ADD,payload:toDo})
+  }).catch(err=>console.error(err))
+ 
 }
 
 

@@ -7,7 +7,8 @@ const Form = () => {
   const Emptytodo={
     title:'',
     description:'',
-    completed:false
+    completed:false,
+    image:null
   }
 
   const{createToDo}=useContext(TodoContext)
@@ -18,7 +19,7 @@ const Form = () => {
 
   const handleChange=(e)=>{
     
-      const {target:{value,type,checked,name}}=e
+      const {target:{value,type,checked,name,files}}=e
       console.log(checked);
       if(type==='text')
       {
@@ -27,6 +28,15 @@ const Form = () => {
           [name]:value
         })
         
+      }
+      if(type=='file'){
+       if(files.length>0){
+        const selectedFile=files[0]
+        setTodo({
+          ...todo,
+          image:selectedFile
+        })
+       }
       }
       if(type=='textarea'){
         setTodo({
@@ -45,7 +55,7 @@ const Form = () => {
 
   const handleSubmit=(e)=>{
     e.preventDefault()
-    createToDo({todo})
+    createToDo(todo)
     setTodo(Emptytodo)
    
     
@@ -64,7 +74,7 @@ const Form = () => {
         <textarea id="desc" name="description" className='form-control' rows="5" onChange={handleChange} value={todo.description}/>
 
         <label htmlFor="img" className="form-label text-light">Imagen</label>
-        <input type="file" id="img" name="file" className='form-control' />
+        <input type="file" id="img" name="file" className='form-control ' onChange={handleChange} />
 
         <div className="form-check form-switch m-2 text-light w-100">
           <input id="completed" type="checkbox"className='form-check-input' onChange={handleChange} name="completed" checked={todo.completed} />
